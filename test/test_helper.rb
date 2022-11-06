@@ -3,7 +3,7 @@ require 'bigdecimal'
 require 'minitest/autorun'
 
 class String
-	def to_bd
-		BigDecimal.new(self)
-	end
+  def to_bd
+    BigDecimal.new(self)
+  end
 end
