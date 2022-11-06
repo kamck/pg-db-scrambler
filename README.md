@@ -66,7 +66,7 @@ The `row` variable will be prepopulated with the current row's values from the i
 	  def process(row)
 	    if row.email_address != 'admin@example.com'
 	      row.name = 'New Name'
-		end
+	    end
 	  end
     end
 	
