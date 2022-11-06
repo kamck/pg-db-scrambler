@@ -4,7 +4,7 @@ module RowModifiers
   class OrderModifier
     UPPER_LIMIT = 5000.00
 
-    def process(row)
+    def call(row)
       row.contract_price = genrand(50.0, UPPER_LIMIT)
       row.net_contract_price = genrand(10.0, row.contract_price)
       row.contract_price_rebate = format_bd subtract(row.contract_price, row.net_contract_price)
@@ -37,7 +37,7 @@ module RowModifiers
       @user_count = user_count
     end
 
-    def process(row)
+    def call(row)
       return if row.id == "0"
 
       row.email_address = "user-#{@user_count}@nologin"
@@ -102,7 +102,7 @@ module PgDumpParser
 
       unless modifier.nil?
         row = builder.build line
-        modifier.process row
+        modifier.call row
         line = row.string
       end
 

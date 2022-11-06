@@ -6,7 +6,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tSupplier\t1235552222\t0"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     email_address = row.string.split(/\t/)[1]
 
@@ -18,7 +18,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tSupplier\t1235552222\t0"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     status = row.string.split(/\t/)[2]
 
@@ -30,7 +30,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tSupplier\t1235552222\t0"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     name = row.string.split(/\t/)[3]
 
@@ -42,7 +42,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tSupplier\t1235552222\t0"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     company_name = row.string.split(/\t/)[4]
 
@@ -54,7 +54,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tCustomer\t1235552222\t0"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     job_title = row.string.split(/\t/)[5]
 
@@ -66,7 +66,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tSupplier\t1235552222\t0"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     phone_number = row.string.split(/\t/)[6]
 
@@ -78,7 +78,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "10\tcustomer@example.com\tENABLED\tCustomer User\tSupplier\t1235552222\t3"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     failed_login_attempt_count = row.string.split(/\t/)[7]
 
@@ -90,7 +90,7 @@ class TestUsersModifier < Minitest::Test
     row_line = "0\tsystem@thisapp.com\tENABLED\tSystem User\tMy Company\tSystem User\t1235552222\t3"
 
     row = EntityBuilder.new(columns).build(row_line)
-    RowModifiers::UsersModifier.new.process row
+    RowModifiers::UsersModifier.new.call row
 
     assert_equal row_line, row.string
   end

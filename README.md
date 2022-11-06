@@ -47,43 +47,41 @@ A modifier can be added by declaring a class in the `RowModifiers` namespace. Th
 
 	
 	module RowModifiers
+	  class CustomersModifier
+	  end
+	end
 
-		class CustomersModifier
-			def process(row)
-			end
-		end
-	
 
-The modifier class must define a method named `process` that takes one parameter. This parameter is the row to be modified. A column can be changed by referencing the column's name. For example, the following changes the `ORDER_TYPE` column in the `CUSTOMERS` table
+The modifier class must define a method named `call` that takes one parameter. This parameter is the row to be modified. A column can be changed by referencing the column's name. For example, the following changes the `ORDER_TYPE` column in the `CUSTOMERS` table
 	
 	class CustomersModifier
-
-		def process(row)
-			row.order_type = 'EXPRESS'
-		end
+	  def call(row)
+	    row.order_type = 'EXPRESS'
+	  end
+	end
 	
 The `row` variable will be prepopulated with the current row's values from the input script. This allows you to conditionally change data.
 
 	class UsersModifier
-
-		def process(row)
-			if row.email_address != 'admin@example.com'
-				row.name = 'New Name'
-			end
+	  def process(row)
+	    if row.email_address != 'admin@example.com'
+	      row.name = 'New Name'
 		end
+	  end
+    end
 	
 Prepopulated values will always be strings, except `NULL`s which will be populated with `nil`.
 
 On output, `true`, `false`, and `nil` values will be translated to their PostgreSQL values. All other values will rely on their `to_str` or `to_s` implementations.
 
 	class SampleTableModifier
-
-		def process(row)
-			row.column1 = 'Person A'
-			row.column2 = true
-			row.column3 = 100
-			row.column4 = nil
-		end
+	  def process(row)
+		row.column1 = 'Person A'
+		row.column2 = true
+		row.column3 = 100
+		row.column4 = nil
+	  end
+	end
 	
 will produce
 
