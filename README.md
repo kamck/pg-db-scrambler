@@ -76,10 +76,10 @@ On output, `true`, `false`, and `nil` values will be translated to their Postgre
 
 	class SampleTableModifier
 	  def process(row)
-		row.column1 = 'Person A'
-		row.column2 = true
-		row.column3 = 100
-		row.column4 = nil
+	    row.column1 = 'Person A'
+	    row.column2 = true
+	    row.column3 = 100
+	    row.column4 = nil
 	  end
 	end
 	
