@@ -25,11 +25,12 @@ The input SQL is a file taken from the output of `pg_dump`. The below snippet wi
 Output
 ---------
 The output from `pg_db_scrambler.rb` can then be imported into the target database.
->**Note**
->It is advisable to run the output script as the application user to retain permissions unless you plan to update permissions after the import has completed.
 
 	psql -f db_clean.sql -U database_user \
 		-h localhost new_database
+
+>**Note**
+>It is advisable to run the output script as the application user to retain permissions unless you plan to update permissions after the import has completed.
 
 Tests
 --------
@@ -86,3 +87,9 @@ On output, `true`, `false`, and `nil` values will be translated to their Postgre
 will produce
 
 	Person A	t	100	\N
+
+Including external modifiers
+-------------------------------
+To use table modifiers defined in other files
+
+	ruby -Ipath/to -ryour_file.rb pg_db_scrambler.rb dump.sql
