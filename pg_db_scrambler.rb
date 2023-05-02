@@ -1,4 +1,4 @@
-require 'bigdecimal'
+require "bigdecimal"
 
 module RowModifiers
   class OrderModifier
@@ -12,7 +12,7 @@ module RowModifiers
 
     private
 
-    def genrand(limit1, limit2=nil)
+    def genrand(limit1, limit2 = nil)
       if limit2.nil?
         rand(0.0..limit1.to_f)
       else
@@ -21,14 +21,14 @@ module RowModifiers
     end
 
     def subtract(*vals)
-      val = BigDecimal.new(vals.shift)
-      vals.each { |v| val = val - BigDecimal.new(v) }
+      val = BigDecimal(vals.shift)
+      vals.each { |v| val -= BigDecimal(v) }
 
       val
     end
 
     def format_bd(bd)
-      bd.truncate(2).to_s('F')
+      bd.truncate(2).to_s("F")
     end
   end
 
@@ -41,7 +41,7 @@ module RowModifiers
       return if row.id == "0"
 
       row.email_address = "user-#{@user_count}@nologin"
-      row.status = 'DISABLED'
+      row.status = "DISABLED"
       row.name = "User #{@user_count}"
       row.company_name = "Company for User #{@user_count}"
       row.job_title = "Title for User #{@user_count}"
@@ -58,27 +58,27 @@ class EntityBuilder
   PG_NULL = '\N'
 
   def initialize(cols)
-    @klass = EntityBuilder.build_class(cols)
+    @klass = build_class(cols)
   end
 
-  def build(row='')
+  def build(row = "")
     @klass.new row.split(PG_FIELD_SEPARATOR)
   end
 
   private
 
-  def self.build_class(attrs)
+  def build_class(attrs)
     Class.new do
-      attr_accessor *attrs
+      attr_accessor(*attrs)
 
       define_method(:initialize) do |*vals|
         attrs.each_with_index do |attr, i|
           value = vals.first[i]
-          instance_variable_set "@#{attr}", value == PG_NULL ? nil : value
+          instance_variable_set "@#{attr}", (value == PG_NULL) ? nil : value
         end
       end
 
-      define_method(:string) do 
+      define_method(:string) do
         attrs.collect do |attr|
           v = instance_variable_get("@#{attr}")
           case v
@@ -98,7 +98,7 @@ module PgDumpParser
     builder = nil
 
     inio.each_line do |line|
-      modifier = nil if line =~ /^\\\./
+      modifier = nil if line.match?(/^\\\./)
 
       unless modifier.nil?
         row = builder.build line
@@ -108,7 +108,7 @@ module PgDumpParser
 
       outio.puts line
 
-      if line =~ /^COPY.*FROM stdin;$/
+      if line.match?(/^COPY.*FROM stdin;$/)
         modifier = find_modifier get_table(line)
         builder = EntityBuilder.new get_columns(line) unless modifier.nil?
       end
@@ -117,23 +117,21 @@ module PgDumpParser
 
   private
 
-  def self.get_table(line)
+  private_class_method def self.get_table(line)
     line[/^COPY\s(\w+)\s/, 1]
   end
 
-  def self.get_columns(line)
+  private_class_method def self.get_columns(line)
     line[/COPY\s\w+\s\((.*)\)\sFROM stdin;/, 1].split(/\s*,\s*/)
   end
 
-  def self.find_modifier(table_name)
-    class_name = "#{table_name.split('_').collect(&:capitalize).join}Modifier".to_sym
+  private_class_method def self.find_modifier(table_name)
+    class_name = "#{table_name.split("_").collect(&:capitalize).join}Modifier".to_sym
 
     if RowModifiers.constants.include? class_name
       RowModifiers.const_get(class_name).new
-    else
-      nil
     end
   end
 end
 
-PgDumpParser.call(ARGF, STDOUT) if __FILE__ == $0
+PgDumpParser.call(ARGF, $stdout) if __FILE__ == $0
