@@ -118,11 +118,11 @@ module PgDumpParser
   private
 
   private_class_method def self.get_table(line)
-    line[/^COPY\s(\w+)\s/, 1]
+    line[/^COPY\s(public\.)?(\w+\.?\w+)\s/, 2]
   end
 
   private_class_method def self.get_columns(line)
-    line[/COPY\s\w+\s\((.*)\)\sFROM stdin;/, 1].split(/\s*,\s*/)
+    line[/COPY\s.+\s\((.*)\)\sFROM stdin;/, 1].split(/\s*,\s*/)
   end
 
   private_class_method def self.find_modifier(table_name)
